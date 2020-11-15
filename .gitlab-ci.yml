@@ -24,7 +24,7 @@ stages:
         --dockerfile $CI_PROJECT_DIR/$DOCKERFILE
         --build-arg SFOS_VERSION="$SFOS_VERSION"
         --build-arg SFOS_ARCH="$SFOS_ARCH"
-        --build-arg CROSS_NAME_SHORT="$CROSS_NAME_SHORT"
+        --build-arg GCC_TARGET="$GCC_TARGET"
         --build-arg CROSS_NAME_RUST="$CROSS_NAME_RUST"
         --destination $CI_REGISTRY_IMAGE/platform-$SFOS_ARCH-$SFOS_VERSION:$CI_COMMIT_REF_SLUG
         --cache=true
@@ -35,7 +35,7 @@ armv7hl-3.4:
     SFOS_VERSION: 3.4.0.24
     DOCKERFILE: Dockerfile.platform
     SFOS_ARCH: armv7hl
-    CROSS_NAME_SHORT: arm
+    GCC_TARGET: arm-linux-gnueabihf
     RUST_TARGET: armv7-unknown-linux-gnueabihf
 
 aarch64-3.4:
@@ -44,7 +44,7 @@ aarch64-3.4:
     SFOS_VERSION: 3.4.0.24
     DOCKERFILE: Dockerfile.platform
     SFOS_ARCH: aarch64
-    CROSS_NAME_SHORT: aarch64
+    GCC_TARGET: aarch64-linux-gnu
     RUST_TARGET: aarch64-unknown-linux-gnu
 
 i486-3.4:
@@ -53,5 +53,5 @@ i486-3.4:
     SFOS_VERSION: 3.4.0.24
     DOCKERFILE: Dockerfile.platform
     SFOS_ARCH: i486
-    CROSS_NAME_SHORT: i686
+    GCC_TARGET: i686-linux-gnu
     RUST_TARGET: i686-unknown-linux-gnu

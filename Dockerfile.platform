@@ -6,7 +6,6 @@ FROM coderus/sailfishos-platform-sdk-$SFOS_ARCH:$SFOS_VERSION as coderus_base
 
 ARG SFOS_VERSION=latest
 ARG SFOS_ARCH=armv7hl
-ARG CROSS_NAME_SHORT=arm
 ARG RUST_TARGET=armv7-unknown-linux-gnueabihf
 
 RUN sdk-manage develpkg install SailfishOS-$SFOS_VERSION-$SFOS_ARCH sqlcipher-devel
@@ -17,7 +16,7 @@ FROM debian:latest
 
 ARG SFOS_VERSION=latest
 ARG SFOS_ARCH=armv7hl
-ARG CROSS_NAME_SHORT=arm
+ARG GCC_TARGET=arm-linux-gnueabihf
 ARG RUST_TARGET=armv7-unknown-linux-gnueabihf
 
 # Install cross compilers
@@ -25,7 +24,7 @@ ARG RUST_TARGET=armv7-unknown-linux-gnueabihf
 RUN apt-get update
 
 RUN apt-get install -y \
-    gcc-$CROSS_NAME_SHORT-linux-gnu g++-$CROSS_NAME_SHORT-linux-gnu binutils-$CROSS_NAME_SHORT-linux-gnu \
+    gcc-$GCC_TARGET g++-$GCC_TARGET binutils-$GCC_TARGET \
     curl \
     qttools5-dev-tools qtchooser qt5-default \
     desktop-file-utils \
