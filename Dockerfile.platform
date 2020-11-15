@@ -64,7 +64,7 @@ RUN cargo install --git https://github.com/RustRPM/cargo-rpm --branch develop
 
 # Add cargo targets
 RUN rustup target add \
-    $RUST_TARGET \
+    $RUST_TARGET
 
 # Additional C dependencies for Whisperfish
 RUN apt-get install -y cmake
