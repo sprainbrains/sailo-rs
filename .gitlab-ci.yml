@@ -1,0 +1,49 @@
+---
+variables: &variables
+  SFOS_VERSION: 3.4.0.24
+  CARGO_HOME: $CI_PROJECT_DIR/cargo
+
+stages:
+  - docker
+  - build
+  - test
+  - deploy
+
+.docker:builder: &docker:builder
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  stage: docker
+  script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - echo "Working around https://github.com/GoogleContainerTools/kaniko/issues/595"
+    - rm -f .dockerignore
+    - /kaniko/executor --context $CI_PROJECT_DIR \
+      --dockerfile $CI_PROJECT_DIR/$DOCKERFILE \
+      --build-arg SFOS_VERSION="$SFOS_VERSION" \
+      --build-arg SFOS_ARCH="$SFOS_ARCH" \
+      --build-arg CROSS_NAME_SHORT="$CROSS_NAME_SHORT" \
+      --build-arg CROSS_NAME_RUST="$CROSS_NAME_RUST" \
+      --destination $CI_REGISTRY_IMAGE/platform-$SFOS_ARCH-$SFOS_VERSION:$CI_COMMIT_REF_SLUG \
+      --cache=true \
+
+armv7hl-3.4:
+  <<: *docker:builder
+  variables:
+    SFOS_ARCH: armv7hl
+    CROSS_NAME_SHORT: arm
+    RUST_TARGET: armv7-unknown-linux-gnueabihf
+
+aarch64-3.4:
+  <<: *docker:builder
+  variables:
+    SFOS_ARCH: aarch64
+    CROSS_NAME_SHORT: aarch64
+    RUST_TARGET: aarch64-unknown-linux-gnu
+
+i486-3.4:
+  <<: *docker:builder
+  variables:
+    SFOS_ARCH: i486
+    CROSS_NAME_SHORT: i686
+    RUST_TARGET: i686-unknown-linux-gnu
