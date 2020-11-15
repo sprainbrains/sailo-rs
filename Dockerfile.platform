@@ -1,17 +1,24 @@
+# ARG needs repeating for every FROM statement
 ARG SFOS_VERSION=latest
 ARG SFOS_ARCH=armv7hl
-ARG CROSS_NAME_SHORT=arm
-ARG RUST_TARGET=armv7-unknown-linux-gnueabihf
 
 FROM coderus/sailfishos-platform-sdk-$SFOS_ARCH:$SFOS_VERSION as coderus_base
 
 ARG SFOS_VERSION=latest
+ARG SFOS_ARCH=armv7hl
+ARG CROSS_NAME_SHORT=arm
+ARG RUST_TARGET=armv7-unknown-linux-gnueabihf
 
 RUN sdk-manage develpkg install SailfishOS-$SFOS_VERSION-$SFOS_ARCH sqlcipher-devel
 
 RUN sudo rm -rf /srv/mer/targets/SailfishOS-$SFOS_VERSION-$SFOS_ARCH/var/cache/zypp/*
 
 FROM debian:latest
+
+ARG SFOS_VERSION=latest
+ARG SFOS_ARCH=armv7hl
+ARG CROSS_NAME_SHORT=arm
+ARG RUST_TARGET=armv7-unknown-linux-gnueabihf
 
 # Install cross compilers
 
