@@ -7,3 +7,16 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+tokio = { version = "0.2", optional = true }
+qmetaobject = { version = "0.1.4", git = "https://gitlab.com/rubdos/qmetaobject-sfos-rs", branch = "sailfishos" }
+anyhow = "1"
+thiserror = "1"
+
+cpp = "0.5"
+
+[build-dependencies]
+cpp_build = "0.5"
+anyhow = "1"
+
+[features]
+tokio-qt = ["tokio"]
