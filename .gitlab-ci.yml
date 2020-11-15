@@ -32,6 +32,7 @@ stages:
 armv7hl-3.4:
   <<: *docker-builder
   variables:
+    SFOS_VERSION: 3.4.0.24
     DOCKERFILE: Dockerfile.platform
     SFOS_ARCH: armv7hl
     CROSS_NAME_SHORT: arm
@@ -40,6 +41,7 @@ armv7hl-3.4:
 aarch64-3.4:
   <<: *docker-builder
   variables:
+    SFOS_VERSION: 3.4.0.24
     DOCKERFILE: Dockerfile.platform
     SFOS_ARCH: aarch64
     CROSS_NAME_SHORT: aarch64
@@ -48,6 +50,7 @@ aarch64-3.4:
 i486-3.4:
   <<: *docker-builder
   variables:
+    SFOS_VERSION: 3.4.0.24
     DOCKERFILE: Dockerfile.platform
     SFOS_ARCH: i486
     CROSS_NAME_SHORT: i686
