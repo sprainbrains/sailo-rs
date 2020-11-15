@@ -25,7 +25,7 @@ stages:
         --build-arg SFOS_VERSION="$SFOS_VERSION"
         --build-arg SFOS_ARCH="$SFOS_ARCH"
         --build-arg GCC_TARGET="$GCC_TARGET"
-        --build-arg CROSS_NAME_RUST="$CROSS_NAME_RUST"
+        --build-arg RUST_TARGET="$RUST_TARGET"
         --destination $CI_REGISTRY_IMAGE/platform-$SFOS_ARCH-$SFOS_VERSION:$CI_COMMIT_REF_SLUG
         --cache=true
 
