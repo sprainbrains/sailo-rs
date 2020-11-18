@@ -67,7 +67,7 @@ RUN rustup target add \
     $RUST_TARGET
 
 # Additional C dependencies for Whisperfish
-RUN apt-get install -y cmake
+RUN apt-get install -y cmake git
 
 RUN mkdir /root/.cargo
 COPY platform-cross-cargo.toml /root/.cargo/config
