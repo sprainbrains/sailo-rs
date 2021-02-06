@@ -8,7 +8,7 @@ ARG SFOS_VERSION=latest
 ARG SFOS_ARCH=armv7hl
 ARG RUST_TARGET=armv7-unknown-linux-gnueabihf
 
-RUN sdk-manage develpkg install SailfishOS-$SFOS_VERSION-$SFOS_ARCH sqlcipher-devel qtmozembed-qt5-devel
+RUN sdk-manage develpkg install SailfishOS-$SFOS_VERSION-$SFOS_ARCH sqlcipher-devel qtmozembed-qt5-devel sqlite3-devel
 
 RUN sudo rm -rf /srv/mer/targets/SailfishOS-$SFOS_VERSION-$SFOS_ARCH/var/cache/zypp/*
 
