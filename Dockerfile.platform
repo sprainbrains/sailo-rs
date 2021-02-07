@@ -12,7 +12,7 @@ RUN sdk-manage develpkg install SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
         sqlcipher-devel \
         qtmozembed-qt5-devel \
         sqlite-devel \
-        openssl-devel \
+        openssl-devel
 
 
 RUN sudo rm -rf /srv/mer/targets/SailfishOS-$SFOS_VERSION-$SFOS_ARCH/var/cache/zypp/*
