@@ -39,7 +39,9 @@ RUN apt-get install -y \
     curl \
     coreutils
 
-RUN apt-get install -y build-essential
+RUN apt-get install -y \
+    build-essential \
+    tcl
 
 RUN apt-get install -y \
     libsqlcipher-dev \
