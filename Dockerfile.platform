@@ -13,6 +13,7 @@ RUN sdk-manage develpkg install SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
         qtmozembed-qt5-devel \
         sqlite-devel \
         openssl-devel \
+        dbus-devel \
         tcl
 
 
