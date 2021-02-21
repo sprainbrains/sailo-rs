@@ -14,6 +14,7 @@ RUN sdk-manage develpkg install SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
         sqlite-devel \
         openssl-devel \
         dbus-devel \
+        libnemotransferengine-qt5-devel \
         tcl
 
 
