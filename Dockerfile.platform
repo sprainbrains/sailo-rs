@@ -74,7 +74,7 @@ RUN rustup toolchain install nightly
 RUN rustup toolchain install beta
 
 # Install cargo-rpm
-RUN cargo install cargo-rpm
+RUN cargo install --git https://github.com/RustRPM/cargo-rpm --branch develop
 
 # Add cargo targets
 RUN rustup target add \
