@@ -20,6 +20,10 @@ stages:
     - echo "Working around https://github.com/GoogleContainerTools/kaniko/issues/595"
     - rm -f .dockerignore
     - >
+        if [[ "$CI_COMMIT_REF_SLUG" == "$CI_DEFAULT_BRANCH" ]]; then
+          EXTRA_DESTINATION="--destination $CI_REGISTRY_IMAGE/platform-$SFOS_ARCH-$SFOS_VERSION:latest"
+        fi
+    - >
         /kaniko/executor --context $CI_PROJECT_DIR
         --dockerfile $CI_PROJECT_DIR/$DOCKERFILE
         --build-arg SFOS_VERSION="$SFOS_VERSION"
@@ -27,6 +31,7 @@ stages:
         --build-arg GCC_TARGET="$GCC_TARGET"
         --build-arg RUST_TARGET="$RUST_TARGET"
         --destination $CI_REGISTRY_IMAGE/platform-$SFOS_ARCH-$SFOS_VERSION:$CI_COMMIT_REF_SLUG
+        $EXTRA_DESTINATION
         --cache=true
 
 armv7hl-3.4:
