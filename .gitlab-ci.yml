@@ -69,4 +69,5 @@ rpm-validator-1.65:
   <<: *docker-builder
   variables:
     DOCKERFILE: Dockerfile.rpm-validator
+    VALIDATOR_VERSION: 1.65
     IMAGE_NAME: rpm-validator
