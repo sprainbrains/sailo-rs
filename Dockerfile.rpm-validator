@@ -10,7 +10,7 @@ RUN tar -C /opt/sdk-harbour-rpmvalidator --strip-components=1 -xvf sdk-harbour-r
 
 FROM fedora:latest
 
-RUN dnf install -y file cpio && dnf clean all
+RUN dnf install -y file cpio binutils findutils && dnf clean all
 COPY --from=base /opt/sdk-harbour-rpmvalidator /opt/sdk-harbour-rpmvalidator
 
 RUN ln -s /opt/sdk-harbour-rpmvalidator/rpmvalidation.sh /usr/local/bin/rpmvalidation.sh
