@@ -21,7 +21,7 @@ stages:
     - rm -f .dockerignore
     - >
         if [[ "$CI_COMMIT_REF_SLUG" == "$CI_DEFAULT_BRANCH" ]]; then
-          EXTRA_DESTINATION="--destination $CI_REGISTRY_IMAGE/platform-$SFOS_ARCH-$SFOS_VERSION:latest"
+          EXTRA_DESTINATION="--destination $CI_REGISTRY_IMAGE/$IMAGE_NAME:latest"
         fi
     - >
         /kaniko/executor --context $CI_PROJECT_DIR
@@ -30,7 +30,8 @@ stages:
         --build-arg SFOS_ARCH="$SFOS_ARCH"
         --build-arg GCC_TARGET="$GCC_TARGET"
         --build-arg RUST_TARGET="$RUST_TARGET"
-        --destination $CI_REGISTRY_IMAGE/platform-$SFOS_ARCH-$SFOS_VERSION:$CI_COMMIT_REF_SLUG
+        --build-arg VALIDATOR_VERSION="$VALIDATOR_VERSION"
+        --destination $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG
         $EXTRA_DESTINATION
         --cache=true
 
@@ -42,6 +43,7 @@ armv7hl-3.4:
     SFOS_ARCH: armv7hl
     GCC_TARGET: arm-linux-gnueabihf
     RUST_TARGET: armv7-unknown-linux-gnueabihf
+    IMAGE_NAME: "platform-$SFOS_ARCH-$SFOS_VERSION"
 
 aarch64-3.4:
   <<: *docker-builder
@@ -51,6 +53,7 @@ aarch64-3.4:
     SFOS_ARCH: aarch64
     GCC_TARGET: aarch64-linux-gnu
     RUST_TARGET: aarch64-unknown-linux-gnu
+    IMAGE_NAME: "platform-$SFOS_ARCH-$SFOS_VERSION"
 
 i486-3.4:
   <<: *docker-builder
@@ -60,3 +63,10 @@ i486-3.4:
     SFOS_ARCH: i486
     GCC_TARGET: i686-linux-gnu
     RUST_TARGET: i686-unknown-linux-gnu
+    IMAGE_NAME: "platform-$SFOS_ARCH-$SFOS_VERSION"
+
+rpm-validator-1.65:
+  <<: *docker-builder
+  variables:
+    DOCKERFILE: Dockerfile.rpm-validator
+    IMAGE_NAME: rpm-validator
