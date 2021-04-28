@@ -11,7 +11,7 @@ This crate contains Docker images, based on the Platform SDK
 (Dockerized [by CODeRUS](https://github.com/CODeRUS/docker-sailfishos-platform-sdk/),
 thank you!), that contain three Rust compilers (stable, beta, nightly).
 
-Use them as `registry.gitlab.com/rubdos/sailo-rs/platform-$MER_ARCH-$SFOS_VERSION:master`, with the following parameters:
+Use them as `registry.gitlab.com/whisperfish/sailo-rs/platform-$MER_ARCH-$SFOS_VERSION:latest`, with the following parameters:
 
 ### `MER_ARCH`
 
@@ -22,3 +22,7 @@ Use them as `registry.gitlab.com/rubdos/sailo-rs/platform-$MER_ARCH-$SFOS_VERSIO
 ### SFOS_VERSION
 
 - `3.4.0.24`
+
+## RPM validator images
+
+Use them as `registry.gitlab.com/whisperfish/sailo-rs/rpm-validator:latest`, with the following parameters:
