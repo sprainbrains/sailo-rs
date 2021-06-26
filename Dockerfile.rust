@@ -8,6 +8,8 @@ ARG SFOS_VERSION=latest
 ARG SFOS_ARCH=armv7hl
 ARG RUST_TARGET=armv7-unknown-linux-gnueabihf
 
+RUN sb2 rustc --version
+
 RUN sdk-manage develpkg install SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
         sqlcipher-devel \
         qtmozembed-qt5-devel \
@@ -23,10 +25,17 @@ RUN sdk-manage tooling maintain SailfishOS-$SFOS_VERSION \
 RUN sdk-manage tooling package-install SailfishOS-$SFOS_VERSION \
         rust cargo rust-std-static-aarch64-unknown-linux-gnu rust-std-static-armv7-unknown-linux-gnueabihf rust-std-static-i686-unknown-linux-gnu
 
-RUN sb2 -m sdk-install -R \
+RUN sdk-manage target maintain SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
         zypper ar --gpgcheck-allow-unsigned -f https://nas.rubdos.be/~rsmet/sailfish-repo/ rubdos
 
 RUN sdk-manage develpkg install SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
-        rust cargo
+        rust cargo \
+RUN sdk-manage develpkg list SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
+        rust
+
+RUN sb2 rustc --version
+RUN rustc --version
+RUN sdk-manage tooling maintain SailfishOS-$SFOS_VERSION \
+        rustc --version
 
 RUN sudo rm -rf /srv/mer/targets/SailfishOS-$SFOS_VERSION-$SFOS_ARCH/var/cache/zypp/*
