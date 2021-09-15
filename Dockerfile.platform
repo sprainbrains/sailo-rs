@@ -35,7 +35,7 @@ RUN apt-get update
 RUN apt-get install -y \
     gcc-$GCC_TARGET g++-$GCC_TARGET binutils-$GCC_TARGET \
     curl \
-    qttools5-dev-tools qtchooser qt5-default \
+    qttools5-dev-tools qtchooser qtbase5-dev-tools qttools5-dev-tools \
     desktop-file-utils \
     protobuf-compiler \
     rpm \
