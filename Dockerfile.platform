@@ -52,7 +52,7 @@ RUN apt-get install -y \
     qtbase5-dev \
     qt5-qmake \
     qtdeclarative5-dev \
-    qt5-default
+    qtbase5-dev-tools qttools5-dev-tools
 
 # Install MER SDK
 
