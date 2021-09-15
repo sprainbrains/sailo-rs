@@ -11,6 +11,7 @@ ARG RUST_TARGET=armv7-unknown-linux-gnueabihf
 RUN sdk-manage develpkg install SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
         sqlcipher-devel \
         qtmozembed-qt5-devel \
+        xulrunner-qt5 \
         sqlite-devel \
         openssl-libs \
         openssl-devel \
