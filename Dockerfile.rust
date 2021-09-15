@@ -29,7 +29,7 @@ RUN sdk-manage target maintain SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
         zypper ar --gpgcheck-allow-unsigned -f https://nas.rubdos.be/~rsmet/sailfish-repo/ rubdos
 
 RUN sdk-manage develpkg install SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
-        rust cargo \
+        rust cargo
 RUN sdk-manage develpkg list SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
         rust
 
