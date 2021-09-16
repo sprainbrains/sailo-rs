@@ -1,14 +1,16 @@
 # ARG needs repeating for every FROM statement
 ARG SFOS_VERSION=latest
 ARG SFOS_ARCH=armv7hl
-
 FROM coderus/sailfishos-platform-sdk-$SFOS_ARCH:$SFOS_VERSION
 
 ARG SFOS_VERSION=latest
 ARG SFOS_ARCH=armv7hl
 ARG RUST_TARGET=armv7-unknown-linux-gnueabihf
 
-RUN sb2 rustc --version
+# Put back the original SailfishOS chrooting script,
+# because CodeRUS has overriden this.  We only need this during buildtime,
+# not at runtime, so it doesn't matter
+COPY mer-tooling-chroot /srv/mer/toolings/SailfishOS-$SFOS_VERSION/mer-tooling-chroot
 
 RUN sdk-manage develpkg install SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
         sqlcipher-devel \
@@ -22,20 +24,21 @@ RUN sdk-manage develpkg install SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
 
 RUN sdk-manage tooling maintain SailfishOS-$SFOS_VERSION \
         zypper ar --gpgcheck-allow-unsigned -f https://nas.rubdos.be/~rsmet/sailfish-repo/ rubdos
-RUN sdk-manage tooling package-install SailfishOS-$SFOS_VERSION \
-        rust cargo rust-std-static-aarch64-unknown-linux-gnu rust-std-static-armv7-unknown-linux-gnueabihf rust-std-static-i686-unknown-linux-gnu
+RUN sdk-manage tooling maintain SailfishOS-$SFOS_VERSION \
+        zypper update --allow-vendor-change -y rust cargo rust-std-static-aarch64-unknown-linux-gnu rust-std-static-armv7-unknown-linux-gnueabihf rust-std-static-i686-unknown-linux-gnu
 
 RUN sdk-manage target maintain SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
         zypper ar --gpgcheck-allow-unsigned -f https://nas.rubdos.be/~rsmet/sailfish-repo/ rubdos
 
-RUN sdk-manage develpkg install SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
-        rust cargo
+RUN sdk-manage target maintain SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
+        zypper install --repo rubdos -y rust cargo
 RUN sdk-manage develpkg list SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
         rust
 
 RUN sb2 rustc --version
-RUN rustc --version
 RUN sdk-manage tooling maintain SailfishOS-$SFOS_VERSION \
+        rustc --version
+RUN sdk-manage target maintain SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
         rustc --version
 
 RUN sudo rm -rf /srv/mer/targets/SailfishOS-$SFOS_VERSION-$SFOS_ARCH/var/cache/zypp/*
