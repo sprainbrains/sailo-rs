@@ -98,7 +98,7 @@ i486-4.1:
 armv7hl-rust-4.1:
   <<: *docker-builder
   variables:
-    SFOS_VERSION: 4.1.0.23
+    SFOS_VERSION: 4.1.0.24
     DOCKERFILE: Dockerfile.rust
     SFOS_ARCH: armv7hl
     GCC_TARGET: arm-linux-gnueabihf
@@ -108,7 +108,7 @@ armv7hl-rust-4.1:
 aarch64-rust-4.1:
   <<: *docker-builder
   variables:
-    SFOS_VERSION: 4.1.0.23
+    SFOS_VERSION: 4.1.0.24
     DOCKERFILE: Dockerfile.rust
     SFOS_ARCH: aarch64
     GCC_TARGET: aarch64-linux-gnu
@@ -118,7 +118,7 @@ aarch64-rust-4.1:
 i486-rust-4.1:
   <<: *docker-builder
   variables:
-    SFOS_VERSION: 4.1.0.23
+    SFOS_VERSION: 4.1.0.24
     DOCKERFILE: Dockerfile.rust
     SFOS_ARCH: i486
     GCC_TARGET: i686-linux-gnu
