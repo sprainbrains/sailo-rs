@@ -37,11 +37,11 @@ RUN sdk-manage tooling maintain SailfishOS-$SFOS_VERSION \
 RUN for TARGET_VERSION in $EXTRA_TARGETS $SFOS_VERSION; do \
         echo Install Rust in SailfishOS-$TARGET_VERSION-$SFOS_ARCH ;\
         sdk-manage target maintain SailfishOS-$TARGET_VERSION-$SFOS_ARCH \
-            zypper ar --gpgcheck-allow-unsigned -f https://nas.rubdos.be/~rsmet/sailfish-repo/ rubdos ;\
+            zypper ar --gpgcheck-allow-unsigned -f https://nas.rubdos.be/~rsmet/sailfish-repo/ rubdos && \
         sdk-manage target maintain SailfishOS-$TARGET_VERSION-$SFOS_ARCH \
-            zypper install --from rubdos -y rust cargo rust-std-static rust-std-static-i686-unknown-linux-gnu ;\
+            zypper install --repo rubdos -y rust cargo rust-std-static rust-std-static-i686-unknown-linux-gnu && \
         sdk-manage develpkg list SailfishOS-$TARGET_VERSION-$SFOS_ARCH \
-            rust ;\
+            rust && \
         sb2 -t SailfishOS-$TARGET_VERSION-$SFOS_ARCH rustc --version ;\
     done
 
