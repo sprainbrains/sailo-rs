@@ -1,11 +1,18 @@
 # ARG needs repeating for every FROM statement
 ARG SFOS_VERSION=latest
+ARG EXTRA_TARGETS=3.4.0.24
 ARG SFOS_ARCH=armv7hl
 FROM coderus/sailfishos-platform-sdk-$SFOS_ARCH:$SFOS_VERSION
 
 ARG SFOS_VERSION=latest
+ARG EXTRA_TARGETS=3.4.0.24
 ARG SFOS_ARCH=armv7hl
 ARG RUST_TARGET=armv7-unknown-linux-gnueabihf
+
+RUN for TARGET_VERSION in $EXTRA_TARGETS; do \
+ sdk-assistant -y create SailfishOS-$TARGET_VERSION-$SFOS_ARCH \
+    https://releases.sailfishos.org/sdk/targets/Sailfish_OS-$TARGET_VERSION-Sailfish_SDK_Target-$SFOS_ARCH.tar.7z --tooling SailfishOS-$SFOS_VERSION ;\
+    done
 
 # Put back the original SailfishOS chrooting script,
 # because CodeRUS has overriden this.  We only need this during buildtime,
@@ -25,20 +32,17 @@ RUN sdk-manage develpkg install SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
 RUN sdk-manage tooling maintain SailfishOS-$SFOS_VERSION \
         zypper ar --gpgcheck-allow-unsigned -f https://nas.rubdos.be/~rsmet/sailfish-repo/ rubdos
 RUN sdk-manage tooling maintain SailfishOS-$SFOS_VERSION \
-        zypper update --allow-vendor-change -y rust cargo rust-std-static-aarch64-unknown-linux-gnu rust-std-static-armv7-unknown-linux-gnueabihf rust-std-static-i686-unknown-linux-gnu
+        zypper install --from rubdos -y rust cargo rust-std-static-aarch64-unknown-linux-gnu rust-std-static-armv7-unknown-linux-gnueabihf rust-std-static-i686-unknown-linux-gnu
 
-RUN sdk-manage target maintain SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
-        zypper ar --gpgcheck-allow-unsigned -f https://nas.rubdos.be/~rsmet/sailfish-repo/ rubdos
-
-RUN sdk-manage target maintain SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
-        zypper install --from rubdos -y rust cargo rust-std-static
-RUN sdk-manage develpkg list SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
-        rust
-
-RUN sb2 rustc --version
-RUN sdk-manage tooling maintain SailfishOS-$SFOS_VERSION \
-        rustc --version
-RUN sdk-manage target maintain SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
-        rustc --version
+RUN for TARGET_VERSION in $EXTRA_TARGETS $SFOS_VERSION; do \
+        echo Install Rust in SailfishOS-$TARGET_VERSION-$SFOS_ARCH ;\
+        sdk-manage target maintain SailfishOS-$TARGET_VERSION-$SFOS_ARCH \
+            zypper ar --gpgcheck-allow-unsigned -f https://nas.rubdos.be/~rsmet/sailfish-repo/ rubdos ;\
+        sdk-manage target maintain SailfishOS-$TARGET_VERSION-$SFOS_ARCH \
+            zypper install --from rubdos -y rust cargo rust-std-static rust-std-static-i686-unknown-linux-gnu ;\
+        sdk-manage develpkg list SailfishOS-$TARGET_VERSION-$SFOS_ARCH \
+            rust ;\
+        sb2 -t SailfishOS-$TARGET_VERSION-$SFOS_ARCH rustc --version ;\
+    done
 
 RUN sudo rm -rf /srv/mer/targets/SailfishOS-$SFOS_VERSION-$SFOS_ARCH/var/cache/zypp/*
