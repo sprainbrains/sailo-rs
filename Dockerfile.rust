@@ -19,15 +19,19 @@ RUN for TARGET_VERSION in $EXTRA_TARGETS; do \
 # not at runtime, so it doesn't matter
 COPY mer-tooling-chroot /srv/mer/toolings/SailfishOS-$SFOS_VERSION/mer-tooling-chroot
 
-RUN sdk-manage develpkg install SailfishOS-$SFOS_VERSION-$SFOS_ARCH \
-        sqlcipher-devel \
-        qtmozembed-qt5-devel \
-        sqlite-devel \
-        openssl-libs \
-        openssl-devel \
-        dbus-devel \
-        libnemotransferengine-qt5-devel \
-        tcl
+RUN for TARGET_VERSION in $EXTRA_TARGETS $SFOS_VERSION; do \
+        echo Install develpkgs in SailfishOS-$TARGET_VERSION-$SFOS_ARCH ;\
+        sdk-manage develpkg install SailfishOS-$TARGET_VERSION-$SFOS_ARCH \
+            sqlcipher-devel \
+            qtmozembed-qt5-devel \
+            sqlite-devel \
+            openssl-libs \
+            openssl-devel \
+            dbus-devel \
+            libnemotransferengine-qt5-devel \
+            tcl \
+        ; \
+    done
 
 RUN sdk-manage tooling maintain SailfishOS-$SFOS_VERSION \
         zypper ar --gpgcheck-allow-unsigned -f https://nas.rubdos.be/~rsmet/sailfish-repo/ rubdos
