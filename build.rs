@@ -25,7 +25,7 @@ fn main() {
     let qt_include_path = qmake_query("QT_INSTALL_HEADERS").expect("QMAKE");
     let qt_include_path = qt_include_path.trim();
 
-    let contains_cpp = ["src/sailfishapp.rs"];
+    let contains_cpp = ["sailfishapp.rs"];
 
     for f in &contains_cpp {
         println!("cargo:rerun-if-changed=src/{}", f);
