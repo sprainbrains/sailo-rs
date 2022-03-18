@@ -55,3 +55,8 @@ RUN for TARGET_VERSION in $EXTRA_TARGETS $SFOS_VERSION; do \
     done
 
 RUN sudo rm -rf /srv/mer/targets/SailfishOS-$SFOS_VERSION-$SFOS_ARCH/var/cache/zypp/*
+
+# Hack for 4.3
+RUN if [[ "$SFOS_VERSION" == "4.3.0.12" ]]; then \
+        echo "--http1.1" > .curlrc \
+    fi
