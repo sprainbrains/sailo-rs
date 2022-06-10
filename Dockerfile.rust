@@ -27,11 +27,17 @@ RUN for TARGET_VERSION in $EXTRA_TARGETS $SFOS_VERSION; do \
             sqlite-devel \
             openssl-libs \
             openssl-devel \
+            openssl-static \
             dbus-devel \
             libnemotransferengine-qt5-devel \
             tcl \
         ; \
     done
+
+# Required by sccache for i486 for some reason.
+RUN sdk-manage tooling maintain SailfishOS-$SFOS_VERSION \
+        zypper install -y openssl-devel
+RUN sudo zypper install -y openssl-devel
 
 RUN sdk-manage tooling maintain SailfishOS-$SFOS_VERSION \
         zypper ar --gpgcheck-allow-unsigned -f https://nas.rubdos.be/~rsmet/sailfish-repo/ rubdos
@@ -54,6 +60,40 @@ RUN for TARGET_VERSION in $EXTRA_TARGETS $SFOS_VERSION; do \
         sb2 -t SailfishOS-$TARGET_VERSION-$SFOS_ARCH rustc --version ;\
     done
 
+COPY sccache sccache
+
+USER root
+RUN chown -R mersdk:mersdk sccache
+USER mersdk
+RUN for TARGET_VERSION in $EXTRA_TARGETS $SFOS_VERSION; do \
+        echo "Installing sccache 0.2.15 (0.3.0 requires Rust 1.58) for SailfishOS $TARGET_VERSION" &&\
+        export PKG_CONFIG_ALLOW_CROSS_i686_unknown_linux_gnu=1 &&\
+        export PKG_CONFIG_ALLOW_CROSS_armv7_unknown_linux_gnueabihf=1 &&\
+        export PKG_CONFIG_ALLOW_CROSS_aarch64_unknown_linux_gnu=1 &&\
+        export HOST_CC=host-cc &&\
+        export HOST_CXX=host-cxx &&\
+        export CC_i686_unknown_linux_gnu=host-cc &&\
+        export LD_i686_unknown_linux_gnu=host-cc &&\
+        export CXX_i686_unknown_linux_gnu=host-cc &&\
+        export PATH=/opt/cross/bin/:$PATH &&\
+        export CARGO_TARGET_ARMV7_UNKNOWN_LINUX_GNUEABIHF_LINKER=armv7hl-meego-linux-gnueabi-gcc &&\
+        export CC_armv7_unknown_linux_gnueabihf=armv7hl-meego-linux-gnueabi-gcc &&\
+        export CXX_armv7_unknown_linux_gnueabihf=armv7hl-meego-linux-gnueabi-g++ &&\
+        export AR_armv7_unknown_linux_gnueabihf=armv7hl-meego-linux-gnueabi-ar &&\
+        export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-meego-linux-gnu-gcc &&\
+        export CC_aarch64_unknown_linux_gnu=aarch64-meego-linux-gnu-gcc &&\
+        export CXX_aarch64_unknown_linux_gnu=aarch64-meego-linux-gnu-g++ &&\
+        export AR_aarch64_unknown_linux_gnu=aarch64-meego-linux-gnu-ar &&\
+        export SB2_RUST_TARGET_TRIPLE=$RUST_TARGET &&\
+        export OPENSSL_STATIC=true &&\
+        sb2 -t SailfishOS-$TARGET_VERSION-$SFOS_ARCH \
+            cargo clean --manifest-path sccache/Cargo.toml && \
+        sb2 -t SailfishOS-$TARGET_VERSION-$SFOS_ARCH \
+            cargo build -j 1 --release --manifest-path sccache/Cargo.toml && \
+        sudo cp sccache/target/$RUST_TARGET/release/sccache /srv/mer/targets/SailfishOS-$TARGET_VERSION-$SFOS_ARCH/usr/local/bin/ ;\
+    done && sudo rm -rf .cargo
+
+RUN sudo rm -rf sccache
 RUN sudo rm -rf /srv/mer/targets/SailfishOS-$SFOS_VERSION-$SFOS_ARCH/var/cache/zypp/*
 
 # Hack for 4.3
