@@ -2,6 +2,8 @@
 variables: &variables
   SFOS_VERSION: 3.4.0.24
   CARGO_HOME: $CI_PROJECT_DIR/cargo
+  GIT_SUBMODULE_STRATEGY: recursive
+  EXTRA_TARGETS: 3.4.0.24
 
 stages:
   - docker
@@ -30,6 +32,7 @@ stages:
         --build-arg SFOS_ARCH="$SFOS_ARCH"
         --build-arg GCC_TARGET="$GCC_TARGET"
         --build-arg RUST_TARGET="$RUST_TARGET"
+        --build-arg EXTRA_TARGETS="$EXTRA_TARGETS"
         --build-arg VALIDATOR_VERSION="$VALIDATOR_VERSION"
         --destination $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_SLUG
         $EXTRA_DESTINATION
@@ -119,6 +122,12 @@ i486-rust-4.4:
   <<: *docker-builder
   variables:
     SFOS_VERSION: 4.4.0.58
+    ## We don't build 3.4 for i486, because
+    #  in that case, rust 1.52 gets installed without the sb2 passthrough,
+    #  and the 3.4 runtime doesn't provide all necessary dependencies.
+    #  If this bothers someone (I don't think there's any i486 device that doesn't support 4.3;
+    #  check conversation at https://matrix.to/#/!clfpfblSRQUbEUGwsD:rubdos.be/$QANC2ZqJuGElnp2Bkvll_4KLmmSmZUqPgthzzT1KRT0?via=libera.chat&via=matrix.org&via=rubdos.be)
+    EXTRA_TARGETS: ""
     DOCKERFILE: Dockerfile.rust
     SFOS_ARCH: i486
     GCC_TARGET: i686-linux-gnu
