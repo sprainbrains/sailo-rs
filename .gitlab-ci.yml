@@ -98,6 +98,26 @@ i486-4.4:
     RUST_TARGET: i686-unknown-linux-gnu
     IMAGE_NAME: "platform-$SFOS_ARCH-$SFOS_VERSION"
 
+armv7hl-rust-4.1:
+  <<: *docker-builder
+  variables:
+    SFOS_VERSION: 4.1.0.24
+    DOCKERFILE: Dockerfile.rust
+    SFOS_ARCH: armv7hl
+    GCC_TARGET: arm-linux-gnueabihf
+    RUST_TARGET: armv7-unknown-linux-gnueabihf
+    IMAGE_NAME: "rust-$SFOS_ARCH-$SFOS_VERSION"
+
+aarch64-rust-4.1:
+  <<: *docker-builder
+  variables:
+    SFOS_VERSION: 4.1.0.24
+    DOCKERFILE: Dockerfile.rust
+    SFOS_ARCH: aarch64
+    GCC_TARGET: aarch64-linux-gnu
+    RUST_TARGET: aarch64-unknown-linux-gnu
+    IMAGE_NAME: "rust-$SFOS_ARCH-$SFOS_VERSION"
+
 armv7hl-rust-4.4:
   <<: *docker-builder
   variables:
