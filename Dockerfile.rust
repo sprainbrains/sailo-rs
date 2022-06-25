@@ -66,7 +66,7 @@ USER root
 RUN chown -R mersdk:mersdk sccache
 USER mersdk
 RUN for TARGET_VERSION in $EXTRA_TARGETS $SFOS_VERSION; do \
-        echo "Installing sccache 0.2.15 (0.3.0 requires Rust 1.58) for SailfishOS $TARGET_VERSION" &&\
+        echo "Installing sccache 0.3.0 for SailfishOS $TARGET_VERSION" &&\
         export PKG_CONFIG_ALLOW_CROSS_i686_unknown_linux_gnu=1 &&\
         export PKG_CONFIG_ALLOW_CROSS_armv7_unknown_linux_gnueabihf=1 &&\
         export PKG_CONFIG_ALLOW_CROSS_aarch64_unknown_linux_gnu=1 &&\
