@@ -130,6 +130,15 @@ impl QmlApp {
         })
     }
 
+    /// Makes the main QtGuiApplication object available in this QML context under the given name.
+    pub fn promote_gui_app_to_qml_context(&mut self, name: QString) {
+        unsafe {
+            cpp!([self as "QmlApplicationHolder*", name as "QString"] {
+                self->view->engine()->rootContext()->setContextProperty(name, self->app.get());
+            })
+        }
+    }
+
     pub fn path_to(path: QString) -> QUrl {
         unsafe {
             cpp!([path as "QString"] -> QUrl as "QUrl" {
@@ -167,6 +176,14 @@ impl QmlApp {
         unsafe {
             cpp!([self as "QmlApplicationHolder*", version as "QString"] {
                 self->app->setApplicationVersion(version);
+            })
+        }
+    }
+
+    pub fn set_quit_on_last_window_closed(&mut self, quit: bool) {
+        unsafe {
+            cpp!([self as "QmlApplicationHolder*", quit as "bool"] {
+                self->app->setQuitOnLastWindowClosed(quit);
             })
         }
     }
