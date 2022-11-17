@@ -8,6 +8,8 @@ ARG SFOS_VERSION=latest
 ARG EXTRA_TARGETS=3.4.0.24
 ARG SFOS_ARCH=armv7hl
 ARG RUST_TARGET=armv7-unknown-linux-gnueabihf
+ARG RUST_VERSION=1.52.1+git3-1
+ARG RUST_STD_VERSION=1.0+git3-1
 
 RUN for TARGET_VERSION in $EXTRA_TARGETS; do \
  sdk-assistant -y create SailfishOS-$TARGET_VERSION-$SFOS_ARCH \
@@ -42,7 +44,7 @@ RUN sudo zypper install -y openssl-devel
 RUN sdk-manage tooling maintain SailfishOS-$SFOS_VERSION \
         zypper ar --gpgcheck-allow-unsigned -f https://nas.rubdos.be/~rsmet/sailfish-repo/ rubdos
 RUN sdk-manage tooling maintain SailfishOS-$SFOS_VERSION \
-        zypper install --from rubdos -y rust cargo rust-std-static-aarch64-unknown-linux-gnu rust-std-static-armv7-unknown-linux-gnueabihf rust-std-static-i686-unknown-linux-gnu
+        zypper install --from rubdos -y rust=$RUST_VERSION cargo=$RUST_VERSION rust-std-static-aarch64-unknown-linux-gnu==$RUST_VERSION rust-std-static-armv7-unknown-linux-gnueabihf==$RUST_VERSION rust-std-static-i686-unknown-linux-gnu==$RUST_VERSION
 
 RUN for TARGET_VERSION in $EXTRA_TARGETS $SFOS_VERSION; do \
         echo Install Rust in SailfishOS-$TARGET_VERSION-$SFOS_ARCH ;\
@@ -50,10 +52,13 @@ RUN for TARGET_VERSION in $EXTRA_TARGETS $SFOS_VERSION; do \
             zypper ar --gpgcheck-allow-unsigned -f https://nas.rubdos.be/~rsmet/sailfish-repo/ rubdos && \
         if [ "$SFOS_ARCH" == "i486" ]; then \
             sdk-manage target maintain SailfishOS-$TARGET_VERSION-$SFOS_ARCH \
-                zypper install --from rubdos -y rust cargo rust-std-static-i686-unknown-linux-gnu ; \
-        else \
+                zypper install --from rubdos -y rust=$RUST_VERSION cargo=$RUST_VERSION rust-std-static-i686-unknown-linux-gnu==$RUST_VERSION ; \
+        elif [ "$SFOS_ARCH" == "armv7hl" ]; then \
             sdk-manage target maintain SailfishOS-$TARGET_VERSION-$SFOS_ARCH \
-                zypper install --repo rubdos -y rust cargo rust-std-static rust-std-static-i686-unknown-linux-gnu ; \
+                zypper install --repo rubdos -y rust=$RUST_VERSION cargo=$RUST_VERSION rust-std-static-armv7-unknown-linux-gnueabihf==$RUST_STD_VERSION rust-std-static-i686-unknown-linux-gnu==$RUST_STD_VERSION ; \
+        elif [ "$SFOS_ARCH" == "aarch64" ]; then \
+            sdk-manage target maintain SailfishOS-$TARGET_VERSION-$SFOS_ARCH \
+                zypper install --repo rubdos -y rust=$RUST_VERSION cargo=$RUST_VERSION rust-std-static-aarch64-unknown-linux-gnu==$RUST_STD_VERSION rust-std-static-i686-unknown-linux-gnu==$RUST_STD_VERSION ; \
         fi && \
         sdk-manage develpkg list SailfishOS-$TARGET_VERSION-$SFOS_ARCH \
             rust && \
