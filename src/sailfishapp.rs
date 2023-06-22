@@ -51,6 +51,10 @@ cpp! {{
 }}
 
 cpp_class! (
+    pub unsafe struct QQmlEngine as "QQmlEngine"
+);
+
+cpp_class! (
     pub unsafe struct QmlApp as "QmlApplicationHolder"
 );
 
@@ -112,6 +116,14 @@ impl QmlApp {
         unsafe {
             cpp!([self as "QmlApplicationHolder*", name as "QString", value as "QVariant"] {
                 self->view->engine()->rootContext()->setContextProperty(name, value);
+            })
+        }
+    }
+
+    pub fn engine(&mut self) -> &mut QQmlEngine {
+        unsafe {
+            cpp!([self as "QmlApplicationHolder*"] -> &mut QQmlEngine as "QQmlEngine *" {
+                return self->view->engine();
             })
         }
     }
