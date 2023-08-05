@@ -11,7 +11,7 @@ cpp! {{
     #include <memory>
     #include <QtQuick/QtQuick>
     #include <QtCore/QDebug>
-    #include <QGuiApplication>
+    #include <QtGui/QQGuiApplication>
     #include <QtQml/QQmlComponent>
     #include <QtQuick/QQuickWindow>
 
