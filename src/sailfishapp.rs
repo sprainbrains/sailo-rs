@@ -15,7 +15,7 @@ cpp! {{
     #include <QtQml/QQmlComponent>
     #include <QtQuick/QQuickWindow>
 
-    #include <auroraapp/auroraapp.h>
+    #include <auroraapp.h>
 
     struct QmlSingleApplicationGuard {
         QmlSingleApplicationGuard() {
@@ -80,7 +80,7 @@ impl QmlApp {
                 #include <QtQml/QtQml>
                 #include <QtCore/QtCore>
 
-                #include <auroraapp/auroraapp.h>
+                #include <auroraapp.h>
             }}
             cpp!([argc as "int", argv as "char**"] -> QmlApp as "QmlApplicationHolder" {
                 static int _argc  = argc;
