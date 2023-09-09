@@ -15,7 +15,7 @@ cpp! {{
     #include <QtQml/QQmlComponent>
     #include <QtQuick/QQuickWindow>
 
-    #include <sailfishapp.h>
+    #include <auroraapp.h>
 
     struct QmlSingleApplicationGuard {
         QmlSingleApplicationGuard() {
@@ -37,8 +37,8 @@ cpp! {{
         std::unique_ptr<QQuickView> view;
 
         QmlApplicationHolder(int &argc, char **argv)
-            : app(SailfishApp::application(argc, argv))
-            , view(SailfishApp::createView()) {
+            : app(Aurora::Application::application(argc, argv))
+            , view(Aurora::Application::createView()) {
                 QObject::connect(
                     view->engine(),
                     &QQmlEngine::quit,
@@ -80,7 +80,7 @@ impl QmlApp {
                 #include <QtQml/QtQml>
                 #include <QtCore/QtCore>
 
-                #include <sailfishapp.h>
+                #include <auroraapp.h>
             }}
             cpp!([argc as "int", argv as "char**"] -> QmlApp as "QmlApplicationHolder" {
                 static int _argc  = argc;
@@ -154,7 +154,7 @@ impl QmlApp {
     pub fn path_to(path: QString) -> QUrl {
         unsafe {
             cpp!([path as "QString"] -> QUrl as "QUrl" {
-                return SailfishApp::pathTo(path);
+                return Aurora::Application::pathTo(path);
             })
         }
     }
@@ -203,7 +203,7 @@ impl QmlApp {
     pub fn install_default_translator(&mut self) -> Result<(), anyhow::Error> {
         let result = unsafe {
             cpp!([self as "QmlApplicationHolder*"] -> u32 as "int" {
-                const QString transDir = SailfishApp::pathTo(QStringLiteral("translations")).toLocalFile();
+                const QString transDir = Aurora::Application::pathTo(QStringLiteral("translations")).toLocalFile();
                 const QString appName = qApp->applicationName();
                 QTranslator translator(qApp);
                 int result = 0;
