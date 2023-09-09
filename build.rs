@@ -32,7 +32,7 @@ fn main() {
     }
 
     cfg.include(&qt_include_path)
-        .include("/usr/include/sailfishapp/")
+        .include("/usr/include/auroraapp/")
         .include(format!("{}/QtCore", qt_include_path))
         // -W deprecated-copy triggers some warnings in old Jolla's Qt distribution.
         // It is annoying to look at while developing, and we cannot do anything about it
