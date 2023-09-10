@@ -33,7 +33,6 @@ fn main() {
 
     cfg.include(&qt_include_path)
         .include("/usr/include/auroraapp/")
-        .include("/usr/lib/")
         .include(format!("{}/QtCore", qt_include_path))
         // -W deprecated-copy triggers some warnings in old Jolla's Qt distribution.
         // It is annoying to look at while developing, and we cannot do anything about it
@@ -41,7 +40,7 @@ fn main() {
         .flag("-Wno-deprecated-copy")
         .build("src/lib.rs");
 
-    let libs = ["sailfishapp", "EGL"];
+    let libs = ["auroraapp", "EGL"];
     for lib in &libs {
         println!("cargo:rustc-link-lib={}", lib);
     }
